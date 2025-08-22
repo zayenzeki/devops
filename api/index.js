@@ -5,27 +5,16 @@ const pool = require("./db");
 // Middleware pour JSON
 app.use(express.json());
 
-// Endpoint test
-app.get('/ping', (req, res) => {
-  res.json({ message: 'pong' });
-});
+let tasks = [
+  { id: 1, title: 'Faire les courses' },
+  { id: 2, title: 'Lire un livre' }
+];
 
 
 // GET /tasks
 app.get("/tasks", async (req, res) => {
-  const result = await pool.query("SELECT * FROM tasks ORDER BY id ASC");
-  res.json(result.rows);
-});
-
-// POST /tasks
-app.post("/tasks", async (req, res) => {
-  const { text } = req.body;
-  const result = await pool.query("INSERT INTO tasks (text) VALUES ($1) RETURNING *", [text]);
-  res.status(201).json(result.rows[0]);
+   res.json(tasks || []); // retourne un tableau même si vide
 });
 
 
-// Lancer serveur
-app.listen(PORT, () => {
-  console.log(`✅ Serveur démarré sur http://localhost:${PORT}`);
-});
+module.exports = app;
